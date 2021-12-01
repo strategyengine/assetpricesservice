@@ -53,7 +53,7 @@ public class CoinLayerClientImpl implements CoinLayerClient {
 			
 			return rates;
 		}catch(Exception e) {
-			e.printStackTrace();
+			log.error("Error calling coinlayer", e);
 		}
 		
 		return null;

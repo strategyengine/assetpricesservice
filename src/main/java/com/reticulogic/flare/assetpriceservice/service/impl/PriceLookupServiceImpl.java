@@ -1,12 +1,16 @@
 package com.reticulogic.flare.assetpriceservice.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -20,24 +24,38 @@ import lombok.extern.log4j.Log4j2;
 @Service
 public class PriceLookupServiceImpl implements PriceLookupService {
 
+	//fetch tokens from songbird -- https://songbird-explorer.flare.network/tokens?type=JSON
+	
 	//first sample lookup service calls coinlayer
 	@VisibleForTesting
 	@Autowired
+	@Qualifier("coinLayerService")
 	protected AssetLookupService coinLayerLookupService;
+
+	@VisibleForTesting
+	@Autowired
+	@Qualifier("coinMarketCapService")
+	protected AssetLookupService coinMarketCapService;
 	
 	//there will be many lookup services for redundancy and if certain assets are only available from some services
 	List<AssetLookupService> lookupServices = new ArrayList<AssetLookupService>();
 	
 	@PostConstruct
 	public void init() {
-	
+		lookupServices.add(coinMarketCapService);	
 		lookupServices.add(coinLayerLookupService);
+
 		
 	}
-	
+	@Cacheable("assetValues")
 	@Override
 	public List<AssetValue> getAssetPrices() {
-		return lookupServices.stream().map(l -> getAssets(l)).flatMap(List::stream).collect(Collectors.toList());
+		Set<AssetValue> assetValues =  lookupServices.stream().map(l -> getAssets(l)).flatMap(List::stream).collect(Collectors.toSet());
+		List<AssetValue> assetValueLst = new ArrayList<AssetValue>(assetValues);
+		
+		Collections.sort(assetValueLst, (a,b)-> a.getAsset().compareTo(b.getAsset()));
+		
+		return assetValueLst;
 	}
 
 	private List<AssetValue> getAssets(AssetLookupService l) {

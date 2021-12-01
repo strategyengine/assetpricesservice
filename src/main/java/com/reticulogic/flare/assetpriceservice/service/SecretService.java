@@ -4,4 +4,6 @@ public interface SecretService {
 
 	String getCoinLayerApiKey();
 
+	String getCoinMarketCapApiKey();
+
 }
