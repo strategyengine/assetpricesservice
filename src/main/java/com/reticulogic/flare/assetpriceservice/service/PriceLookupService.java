@@ -8,4 +8,5 @@ public interface PriceLookupService {
 
 	List<AssetValue> getAssetPrices();
 
+
 }
