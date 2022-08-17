@@ -6,6 +6,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -27,6 +28,8 @@ public class XrplMetaOrgClientImpl implements XrplMetaOrgClient {
 	
 	//https://s1.xrplmeta.org/token/FSE:rs1MKY54miDtMFEGyNuPd3BLsXauFZUSrj
 	private String endpointToken = "https://s1.xrplmeta.org/token/%s:%s";
+	
+	private static int MAX_ATTEMPTS = 3;
 	
 	
 	//offset starts at 0
@@ -57,6 +60,14 @@ public class XrplMetaOrgClientImpl implements XrplMetaOrgClient {
 	
 	@Override
 	public XrplTokenPriceDto getIssuedToken(String currency, String issuer){
+		return getIssuedToken(currency, issuer, 0);
+	}
+	
+	private XrplTokenPriceDto getIssuedToken(String currency, String issuer, int attempt){
+		if(attempt > MAX_ATTEMPTS) {
+			return null;
+		}
+		attempt++;
 		
 		String url = String.format(endpointToken, currency, issuer);
 		HttpGet httpGet = new HttpGet(url);
@@ -64,7 +75,14 @@ public class XrplMetaOrgClientImpl implements XrplMetaOrgClient {
 		try (CloseableHttpResponse httpResponse = closeableHttpClient.execute(httpGet)){
 			
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
-			
+			if(HttpStatus.TOO_MANY_REQUESTS.value() == statusCode) {
+				try {
+					Thread.sleep(5000);
+				}catch(Exception e) {
+					
+				}
+				return getIssuedToken(currency, issuer, attempt);
+			}
 			if(statusCode != 200) {
 				log.warn(String.format("No data found from xrplmeta status:%s currency:%s issuer:%s " , statusCode, currency, issuer));
 				return null;
