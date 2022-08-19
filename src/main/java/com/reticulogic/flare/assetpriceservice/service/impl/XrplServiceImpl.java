@@ -22,7 +22,12 @@ public class XrplServiceImpl implements XrplService {
 	public XrplTokenPriceDto getXrplIssuedPrice(String currency, String issuer) {
 		
 
-			return xrplMetaOrgClient.getIssuedToken(currency, issuer);
+		XrplTokenPriceDto dto = xrplMetaOrgClient.getIssuedToken(currency, issuer);
+		
+		if(dto.getMeta().getToken().getIcon()==null) {
+			dto.getMeta().getToken().setIcon(dto.getMeta().getIssuer().getIcon());
+		}
+		return dto;
 	
 			
 

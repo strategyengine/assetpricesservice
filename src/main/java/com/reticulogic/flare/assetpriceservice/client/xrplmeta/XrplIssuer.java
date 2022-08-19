@@ -15,9 +15,13 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
-public class XrplTokenMetaDto {
+public class XrplIssuer {
 
-	private XrplTokenDto token;;
-	private XrplIssuer issuer;
+	private String description;
+	private String icon;
+	private Boolean kyc;
+	private String name;
+	
+	
 	
 }
