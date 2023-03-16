@@ -44,7 +44,7 @@ public class CoinLayerClientImpl implements CoinLayerClient {
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
 			
 			if(statusCode != 200) {
-				log.warn("No rates found from coinloan " + statusCode);
+				log.warn("No rates found from coinlayer " + statusCode);
 				return null;
 			}
 			

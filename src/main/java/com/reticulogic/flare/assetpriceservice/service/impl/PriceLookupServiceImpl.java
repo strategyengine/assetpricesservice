@@ -39,6 +39,10 @@ public class PriceLookupServiceImpl implements PriceLookupService {
 	@Qualifier("coinMarketCapService")
 	protected AssetLookupService coinMarketCapService;
 
+	@Autowired
+	@Qualifier("coinGeckoService")
+	protected AssetLookupService coinGeckoService;
+	
 	// there will be many lookup services for redundancy and if certain assets are
 	// only available from some services
 	List<AssetLookupService> lookupServices = new ArrayList<AssetLookupService>();
@@ -47,7 +51,7 @@ public class PriceLookupServiceImpl implements PriceLookupService {
 	public void init() {
 		lookupServices.add(coinMarketCapService);
 		lookupServices.add(coinLayerLookupService);
-
+		lookupServices.add(coinGeckoService);
 	}
 
 	@Cacheable("assetValuesCache")
