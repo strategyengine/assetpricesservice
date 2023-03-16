@@ -41,7 +41,7 @@ public class CoinMarketCapClientImpl implements CoinMarketCapClient {
 
 		List<NameValuePair> paratmers = new ArrayList<NameValuePair>();
 		paratmers.add(new BasicNameValuePair("start", "1"));
-		paratmers.add(new BasicNameValuePair("limit", "300"));
+		paratmers.add(new BasicNameValuePair("limit", "1500"));
 		paratmers.add(new BasicNameValuePair("convert", "USD"));
 
 		try {
