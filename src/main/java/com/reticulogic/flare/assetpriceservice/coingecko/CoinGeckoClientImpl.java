@@ -24,14 +24,16 @@ public class CoinGeckoClientImpl implements CoinGeckoClient {
 	@Autowired
 	private ObjectMapper objectMapper;
 
-	private String endpoint = "https://api.coingecko.com/api/v3/simple/price?ids=the-reaper,songbird,aquarius,beethoven-x,liquiddriver,deus-finance,fira,lumenswap,"
+	private String endpoint = "https://api.coingecko.com/api/v3/simple/price?ids=the-reaper,songbird,aquarius,beethoven-x,liquiddriver,fira,lumenswap,"
 			+ "realio-network&vs_currencies=usd";
 
 	@Override
 	public Map<String, Map<String, Object>> getCoinGeckoPrices() {
+
+		HttpResponse response = null;
 		try {
 
-			HttpResponse response = closeableHttpClient.execute(new HttpGet(endpoint));
+		   response = closeableHttpClient.execute(new HttpGet(endpoint));
 
 			String responseString = new BasicResponseHandler().handleResponse(response);
 
@@ -50,7 +52,7 @@ public class CoinGeckoClientImpl implements CoinGeckoClient {
 		} catch (
 
 		Exception e) {
-			log.error("Error calling coingecko", e);
+			log.error("Error calling coingecko " + response, e);
 		}
 
 		return null;

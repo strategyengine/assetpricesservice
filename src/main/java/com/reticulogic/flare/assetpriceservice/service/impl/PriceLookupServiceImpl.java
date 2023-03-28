@@ -50,7 +50,7 @@ public class PriceLookupServiceImpl implements PriceLookupService {
 	@PostConstruct
 	public void init() {
 		lookupServices.add(coinMarketCapService);
-		lookupServices.add(coinLayerLookupService);
+//		lookupServices.add(coinLayerLookupService);
 		lookupServices.add(coinGeckoService);
 	}
 
