@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
+import com.reticulogic.flare.assetpriceservice.coinmarketecap.CoinMarketCapServiceImpl;
 import com.reticulogic.flare.assetpriceservice.model.AssetValue;
 import com.reticulogic.flare.assetpriceservice.service.AssetLookupService;
 import com.reticulogic.flare.assetpriceservice.service.PriceLookupService;
@@ -71,6 +72,8 @@ public class PriceLookupServiceImpl implements PriceLookupService {
 		try {
 			List<AssetValue> assets = l.getAssetPrices();
 			log.debug("Found assets from {} total {}", l.getClass().getName(), assets.size());
+		
+			
 			return assets;
 		} catch (Exception e) {
 			log.error("Error looking up assets " + l, e);

@@ -24,7 +24,7 @@ public class CoinGeckoClientImpl implements CoinGeckoClient {
 	@Autowired
 	private ObjectMapper objectMapper;
 
-	private String endpoint = "https://api.coingecko.com/api/v3/simple/price?ids=the-reaper,songbird,aquarius,beethoven-x,liquiddriver,fira,lumenswap,"
+	private String endpoint = "https://api.coingecko.com/api/v3/simple/price?ids=the-reaper,songbird,aquarius,beethoven-x,liquiddriver,fira,lumenswap,ripple,"
 			+ "realio-network&vs_currencies=usd";
 
 	@Override
